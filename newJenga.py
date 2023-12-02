@@ -23,7 +23,9 @@
 # - QuickSort: to sort the leaderboard in descending order
 
 
-
+import os
+import csv
+from datetime import datetime
 from generateTower import *
 
 class JengaGame:
@@ -37,8 +39,11 @@ class JengaGame:
                 piece.val = 1
         
         # moves stack for backtracking
-        self.moves = []
+        self.moves = []   
+        # order -> [ [removed_layer_piece_index_1, removed_piece_index_1, added_piece_layer_index_1, added_piece_index_1], [... _2] ]
+        
         self.num_moves = 0
+        
 
     def calculateProbability(self, block):
         # Placeholder for probability calculation
@@ -155,6 +160,7 @@ class JengaGame:
         
         # Set the value of the position to 1
         last_layer.pieces[position_index].val = 1
+        self.addMove(-1, position_index, True)
         self.num_moves += 1
 
 
@@ -187,41 +193,85 @@ class JengaGame:
         
         # Set the value of the specified piece to 0
         self.tower.layers[layer_index].pieces[piece_index].val = 0
-        self.addMove(layer_index, piece_index)
+        self.addMove(layer_index, piece_index, False)
         
-    def addMove(self, layer_index, piece_index):
-        pass
+    def addMove(self, layer_index, piece_index, add):
+        
+        # append the new move to stack
+        
+        # first you add the removed piece, and then the added piece
+        if not add:
+            self.moves.append([layer_index, piece_index])
+            
+        else:
+            self.moves[-1].append(layer_index)
+            self.moves[-1].append(piece_index)
 
-    def backtracking(self):
+    def backtrack(self):
+        if not self.num_moves:
+            print("BRUH. You're at the starting point, you can't go back")
+            return
+        
         # Undo the last move
         # Returns game_over = True, just in case player wants to backtrack after game over
         # uses a stack or linked list to keep track of moves
         # maybe, can add a limit to undo moves in game loop
-        
+        print("\nBacktracking\n")
         remove_layer, remove_piece, add_layer, add_piece = self.moves.pop()
         
-        self.tower[remove_layer].pieces[remove_piece] = 1
-        self.tower[add_layer].pieces[add_piece] = 0
+        print(remove_layer, remove_piece, add_layer, add_piece)
         
-        last_layer = self.tower[-1]
         
-        if self.num_moves - 1 < 0:
-            print("You cannot go back. You are already at game start!")
-            return
+        # reverse engineer the process
+        self.tower.layers[remove_layer].pieces[remove_piece].val = 1
+        self.tower.layers[add_layer].pieces[add_piece].val = 0
+        
+        last_layer = self.tower.layers[-1]
+        
         
         if all(piece.val == 0 for piece in last_layer.pieces):
             self.tower.layers.remove(last_layer)
         self.num_moves -= 1
            
-          
+    def print_tower(self):
+        for layer in reversed(self.tower.layers):
+            print(layer)
+            
+    def game_over(self):
+        print("\n---------- GAME OVER ----------\n")
+        
+        name = input("Input your name to be added to the Leaderboard! -> ")
+        date = datetime.now().strftime("%Y-%m-%d")
+        return name, date
+    
 
-    def leaderboard(self, player_name, score):
-        # Sort the scores in descending order
-        # Print the leaderboard
-        pass
 
+def sorting_key(row):
+    return int(row[1])
 
+def quicksort(data_arr):
+    if len(data_arr) <= 1:
+        return data_arr
 
+    pivot = data_arr[len(data_arr) // 2]
+    left = [x for x in data_arr if sorting_key(x) > sorting_key(pivot)]
+    middle = [x for x in data_arr if sorting_key(x) == sorting_key(pivot)]
+    right = [x for x in data_arr if sorting_key(x) < sorting_key(pivot)]
+    return quicksort(left) + middle + quicksort(right)
+
+def print_leaderboard(file_name):
+    with open(file_name, "r") as csv_file:
+        csv_reader = csv.reader(csv_file)
+        header = next(csv_reader)  # Skip the header row
+        data = list(csv_reader)
+        
+    sorted_data = quicksort(data)
+    print("\nLadies and Gentleman... The Leaderboard")
+    print("Name     Number of Moves     Date")
+    for row in sorted_data:
+        print(f"{row[0]}    {row[1]}            {row[2]}")
+
+print_leaderboard('scores.txt')
 # Game loop
 def game_loop():
     game = JengaGame(18)
@@ -232,39 +282,67 @@ def game_loop():
         print(layer)
 
     while not game_over:
-
+        print(f"\nNumber of moves: {game.num_moves}")
+        print(f"Moves list: {game.moves}")
+        
+        # Instruct the player of backtracking option after first move
+        if game.num_moves > 0: print("\nEnter 4 if you want to undo your move")
+        
         # Player makes a move removing piece
-        move = input("\nEnter the layer and piece you want to remove (e.g., 2A): ")
+        move = input("Enter the layer and piece you want to remove (e.g., 2A): ")
 
+        if move == "-1":
+            game.backtrack()
+            game.print_tower()
+            continue
+        
+                    
         game.removePiece(move)
-
+        
         # Print tower
-        for layer in reversed(game.tower.layers):
-            print(layer)
-
+        game.print_tower()
 
         # Check tower stability
         if not game.checkStability():
             print("\nTower falls. Game over!")
             game_over = True
             break
-
-
+        
         # Ask the user for the position to add the piece
         position = input("\nEnter the position to add the piece you just removed (A/B/C): ")
 
         # Add the piece to the tower at the specified position
         game.addPiece(position)
+    
 
         # Print tower
-        for layer in reversed(game.tower.layers):
-            print(layer)
+        game.print_tower()
 
         if not game.checkStability():
             print("\nTower falls. Game over!")
             game_over = True
     
-    # Print Player leaderboard (maybe)
+    
+    name, date = game.game_over()
+
+    data = [name, game.num_moves, date]
+    
+    file_name = "scores.txt"
+    
+    # Write to file where scores will be stored
+    if not os.path.isfile(file_name):
+        with open(file_name, "w", newline='') as csv_file:
+            csv_writer = csv.writer(csv_file)
+            csv_writer.writerow(["Name", "Number of Moves", "Date"])
+            csv_writer.writerow(data)
+    else:
+        with open(file_name, "a", newline='') as csv_file:
+            csv_writer = csv.writer(csv_file)
+            csv_writer.writerow(data)
+
+    # Print Player leaderboard
+    print_leaderboard(file_name)
+    
 
 # Start the game
 game_loop()
