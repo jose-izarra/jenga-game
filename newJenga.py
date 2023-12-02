@@ -16,7 +16,7 @@
 # Data structures:
 # - 3D matrix for the tower
 # - Hashmap for the leaderboard, key = player name, value = score
-# - Linked list for the moves, to be able to backtrack
+# - Stack list for the moves, to be able to backtrack
 
 # Algorithms:
 # - Backtracking: you will be able to go back after each move if you don't feel you removed the right piece
@@ -35,6 +35,10 @@ class JengaGame:
         for layer in self.tower.layers:
             for piece in layer.pieces:
                 piece.val = 1
+        
+        # moves stack for backtracking
+        self.moves = []
+        self.num_moves = 0
 
     def calculateProbability(self, block):
         # Placeholder for probability calculation
@@ -151,6 +155,7 @@ class JengaGame:
         
         # Set the value of the position to 1
         last_layer.pieces[position_index].val = 1
+        self.num_moves += 1
 
 
     def removePiece(self, move):
@@ -182,13 +187,33 @@ class JengaGame:
         
         # Set the value of the specified piece to 0
         self.tower.layers[layer_index].pieces[piece_index].val = 0
+        self.addMove(layer_index, piece_index)
+        
+    def addMove(self, layer_index, piece_index):
+        pass
 
     def backtracking(self):
         # Undo the last move
         # Returns game_over = True, just in case player wants to backtrack after game over
         # uses a stack or linked list to keep track of moves
         # maybe, can add a limit to undo moves in game loop
-        pass
+        
+        remove_layer, remove_piece, add_layer, add_piece = self.moves.pop()
+        
+        self.tower[remove_layer].pieces[remove_piece] = 1
+        self.tower[add_layer].pieces[add_piece] = 0
+        
+        last_layer = self.tower[-1]
+        
+        if self.num_moves - 1 < 0:
+            print("You cannot go back. You are already at game start!")
+            return
+        
+        if all(piece.val == 0 for piece in last_layer.pieces):
+            self.tower.layers.remove(last_layer)
+        self.num_moves -= 1
+           
+          
 
     def leaderboard(self, player_name, score):
         # Sort the scores in descending order
