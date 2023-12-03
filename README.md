@@ -12,8 +12,7 @@ ___
 |Unfamiliar with Jenga?|Explains the main concepts related to the Jenga boardgame. If you have prior knowledge you can skip this section|
 |Data Structures| Section of listed Data Structures as well as why and how we implemented them into the project.|
 |Algorithms| Section of listed Algorithms as well as why and how we implemented them into the project|
-|Project Analysis| This section delves into the time complexity of the chosen Algorithms and how they function with the Data structures that we have implemented|
-|Results| Contains the results of the methods listed above and how the project turned out|
+|Project Analysis: Time Complexity| This section delves into the time complexity of the chosen Algorithms and how they function with the Data structures that we have implemented|
 
 ___
 ### Unfamiliar with _Jenga_? <div id='id-section1'/>
@@ -56,69 +55,76 @@ A Hash Table (or dictionary in Python) is chosen for the leaderboard for the fol
 3. **Dynamic Player Addition/Removal:**
     - Hash Table can dynamically grow or shrink based on the number of players participating. This flexibility is crucial in a game where players can join or leave, as it allows for easy updates to the leaderboard.
 
-### Linked List (Backtracking)
 
-- A linked list is chosen for tracking moves in order to facilitate backtracking in the game. Here's why we chose a linked list for the Jenga Game:
 
-1. **Sequential Order:**
-    - Linked lists maintain the order of elements, which is essential for tracking moves in order. Each node in the linked list represents a move, and the order of nodes corresponds to the order in which moves were made during the game.
-2. **Constant Time Insertion/Deletion:**
-    - Inserting or deleting a move from a linked list is a constant time `O(1)` operation when given the node to be added or removed. This is advantageous for backtracking, as it allows for efficient undoing of moves.
-3. **Memory Efficiency:**
-    - Linked lists dynamically allocate memory for each move, making them memory-efficient. This is particularly useful in scenarios where the number of moves can vary, and memory needs to be managed dynamically.
-4. **Backtracking Support:**
-    - The structure of a linked list allows for straightforward backtracking. When a player decides to undo a move, the game can navigate the linked list to the previous node, effectively reverting the game state to the previous move.
-  
 ___
-### Algorithms:
+## Algorithms:
 
-#### Backtracking:
+### Backtracking with a Stack: O(n)
 
-- Due to this being a digital game we wanted to implement backtracking so that the player could undo their moves. Due to implementing the Linked List Data Stucture, we can make these moves in `O(1)` time. 
+1. **Undoing Moves (Backtracking):**
+    - Undoing a move with a stack involves popping the top element of the stack. This operation is a constant time operation (`O(1)`) since it directly accesses the top of the stack.
+2. **Inserting Moves (Adding to the Stack):**
+    - When a new move is made, it needs to be pushed onto the stack. This operation is also a constant time operation (`O(1)`) as it involves adding an element to the top of the stack.
+3. **Deleting Moves (Removing from the Stack):**
+    - Removing a move during backtracking involves popping the top element from the stack. Like inserting moves, this operation is a constant time operation (`O(1)`).
 
-- **Undoing Moves:**
-    - Backtracking is used to allow players to undo moves. In a game like _Jenga_, where the goal is to maintain the stability of the tower, giving players the ability to backtrack allows them to reconsider their moves if they feel they have removed the wrong piece. This feature enhances the user experience and strategic decision-making.
-
-**Key Advantages:**
+#####  **Key Advantages:**
 
 1. **Flexibility:**
     - Backtracking provides flexibility by allowing players to explore different move sequences and strategies. It adds a layer of interactivity and engagement as players can experiment without the fear of irreversible consequences.
 2. **Error Correction:**
     - In a game with complex rules and potential for mistakes, backtracking serves as a mechanism for error correction. If a player realizes that a move has negatively impacted the tower's stability, they can backtrack to a previous state and try an alternative approach.
 
-#### QuickSort : O(n log n)
+##### Considerations:
 
-**Purpose:**
+- **Space Complexity:**
+    - Using a stack for backtracking may have implications for space complexity, especially if the stack becomes large. However, in practice, for games such as _Jenga_ with a moderate number of moves, the space usage is often reasonable.
+
+### QuickSort : O(n log n)
 
 - **Leaderboard Sorting:**
     - QuickSort is employed to sort the leaderboard in descending order based on player scores. This ensures that the player with the highest score is positioned at the top of the leaderboard, providing a clear and easily interpretable ranking.
 
-**Key Advantages:**
+##### **Key Advantages:**
 
 1. **Efficient Sorting:**
-    - QuickSort is known for its efficiency in sorting large datasets. In the context of a leaderboard, where scores are likely to be dynamic and change frequently, the ability to quickly re-sort the leaderboard is essential for maintaining an up-to-date ranking.
+    - QuickSort in the context of a leaderboard, where scores are dynamic and change frequently, the ability to quickly re-sort the leaderboard is essential for maintaining an up-to-date ranking.
 2. **Descending Order:**
-    - Sorting in descending order is important for leaderboard presentation. It allows players to easily identify the top performers and adds a competitive element to the game. QuickSort, with its average time complexity of O(n log n), ensures fast sorting even for larger leaderboards.
+    - Sorting in descending order is important for leaderboard presentation. It allows players to easily identify the top performers. QuickSort, with its average time complexity of O(n log n), ensures fast sorting even for larger leaderboards.
 3. **Consistent User Experience:**
     - A consistently sorted leaderboard provides a better user experience. Players can quickly assess their standing and compare their scores with others, fostering competition and engagement.
 
+
+### Linear Search for Tower Probabilities:
+
+- To update the probabilities of the towers layers and pieces, we use Linear Search which has a time complexity of O(n), meaning that we go through the entire tower as one piece's change will impact the probabilities of the layers in each as well.
+
+1. **Checking Tower Probabilities:**
+    - Linear search is employed to check the probabilities associated with the state of the _Jenga_ tower. This involves updating for specific configurations, and conditions within the tower matrix that influence the probability of the tower falling over.
+2. **Dynamic Probability Evaluation:**
+    - Linear search in this context implies a dynamic evaluation of the tower's stability. The algorithm traverses the tower matrix to identify relevant conditions that contribute to the overall probability calculation. For example in the case of a side and center piece missing in a layer, it will undoubtedly cause the layers above to fall.
+
+##### Considerations:
+
+- The main thing to mention here is that we know this algorithm is not perfect for the job, but it gets it done with a reasonable accuracy. Specifically considering the case that when a piece is removed and the tower does not fall, this would imply that the probabilities of the tower falling will only be updated to the layers above the piece that was removed. This in our case could be added as an improvement, but the worst case scenario if we were only to update the layers above the removed piece would still be done in linear `O(n)` time, so we did not think it that big of an issue.
 ___
-### Project Analysis: Time Complexity
+## Project Analysis: Time Complexity
 
-##### Backtracking:
+### Backtracking : O(n)
 
-- The time complexity of backtracking with a linked list depends on the specific operations done  during backtracking. The operations of note would involve:
+- The time complexity of backtracking with a stack depends on the specific operations done  during backtracking. The operations of note would involve:
 
 1. **Undoing Moves (Backtracking):**
-    - In a linked list, undoing a move involves navigating from the current state to the previous state. This operation is typically a constant time operation (`O(1)`) because, in a linked list, moving to the previous node can be done directly.
+    - In a stack, undoing a move involves popping the most recent move, thus making the previous move now the current one. This operation is typically done in constant time `O(1)`.
     
-1. **Inserting Moves (Adding to the Linked List):**
-    - When a new move is made, it needs to be added to the linked list. This operation is also a constant time operation (`O(1)`) because inserting a new node at the beginning or end of a linked list can be done in constant time.
+1. **Inserting Moves (Adding to the Stack):**
+    - When a new move is made, it needs to be added to the stack via a push. This operation is essentially just adding the new move into the top of the stack and is ususally a constant time operation  of  `O(1)`.
     
-1. **Deleting Moves (Removing from the Linked List):**
-    - Removing a move during backtracking involves deleting a node from the linked list. This operation is, again, a constant time operation (`O(1)`) because, in a linked list, removing a node at a given position can be done in constant time if the reference to the node is available.
+1. **Deleting Moves (Removing from the Stack):**
+    - Similar to Undoing Moves, removing a move during backtracking involves popping from the stack. This operation is, again, a constant time operation `O(1)` because, in a stack, the move will be at the top. For all intents and purposes this is the same as backtracking.
 
-##### QuickSort :
+### QuickSort : O(n log n)
 
 1. **Average Case Time Complexity:**
     
@@ -130,6 +136,14 @@ ___
     
     - The leaderboard likely contains a small number of scores, and the data is not expected to be highly unorganized. QuickSort is well-suited for efficiently sorting small to moderately sized arrays with random or semi-random data.
 
-___
 
-## Results
+### Linear Search : O(n)
+
+#### Time Complexity:
+
+- **Average Case:**
+    - For the average case, Linear search will run at (quite obviously) O(n) time complexity, where n is the size of the tower matrix. Linear search sequentially examines elements and layers in this case to make sure that any conditions being met impact the towers probability of falling
+- **Worst Case:**
+    - For the worst case, Linear search also has an O(n) time complexity. In the worst case, the search operation needs to traverse the entire tower matrix to evaluate its stability. Which although a negligible for the most part in this game since we do not have to scale it the game, we would normally look for a better method to look over the probabilities
+
+___
