@@ -1,26 +1,20 @@
-# To do:
-# Avg and worst runtime complexity of each function, in a READ.ME file and comments
-# Complexity in code comments and in the READ.ME file analysis. 
+"""
 
-# To add in the code:
-# - Add a function to check if the tower is stable
-# - Add a function
-# - Add a timer for each player which will later impact there scores. Add if timer runs out, plaer loses and is skipped.
-# The timer starts for the next player the moment the previous player makes a move. Timer starts with 50 seconds, which score = 10 * seconds left
+                        Welcome to our ADS Jenga Game! 
+            
+        This is a game of Jenga we made entirely from scratch using algorithms and data structures. 
+        
+        Some features of our game are: 
 
-# - The array of scores will be sorted in descending order, so the player with the highest score will be at the top of the leaderboard. 
-# Use QuickSort to sort the array of scores. Analyze time complexity.
+            Data structures: 
+                - 3D matrix for the tower
+                - Stack list for the moves, to be able to backtrack
 
-# - Integrate graphics for the leaderboard and the tower in the game logic
-
-# Data structures:
-# - 3D matrix for the tower
-# - Hashmap for the leaderboard, key = player name, value = score
-# - Stack list for the moves, to be able to backtrack
-
-# Algorithms:
-# - Backtracking: you will be able to go back after each move if you don't feel you removed the right piece
-# - QuickSort: to sort the leaderboard in descending order
+            Algorithms: 
+                - Backtracking: you will be able to go back after each move if you don't feel you 
+                                removed the right piece. This pops the last element in the stack of moves
+                - QuickSort: to sort the leaderboard in descending order
+"""
 
 
 import os
@@ -296,7 +290,7 @@ def print_leaderboard(file_name):
     print("\n---------- LEADER BOARD ----------\n")
     print("|Name|---------|Moves|---------|Date|")
     for row in sorted_data:
-        print(f"{row[0]}    {row[1]}            {row[2]}")
+        print(f"|{row[0]}|---------|{row[1]}|---------|{row[2]}|")
 
 
 # Game loop
