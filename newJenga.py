@@ -1,5 +1,4 @@
 """
-
     Welcome to our ADS Jenga Game! 
         By: Rodrigo Sagastegui, Sebastian Perilla, Jose Izarra and Massimo Giuseppe
 
