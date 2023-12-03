@@ -1,3 +1,4 @@
-_pycache
+_pycache__
 .venv
-scores
+scores.txt
+tempCodeRunnerFile.py
