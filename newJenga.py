@@ -131,67 +131,77 @@ class JengaGame:
         # Add a piece to the top of the tower
         # Has to check which spots are empty in the top layer before adding a new layer
         # Get the last layer
-        last_layer = self.tower.layers[-1]
+        try:
+            last_layer = self.tower.layers[-1]
 
-        # Check if the last layer is full
-        if all(piece.val == 1 for piece in last_layer.pieces):
-            # If the last layer is full, create a new layer with zeros
-            new_layer = JengaLayer(orientation="horizontal" if len(self.tower.layers) % 2 == 0 else "vertical")
+            # Check if the last layer is full
+            if all(piece.val == 1 for piece in last_layer.pieces):
+                # If the last layer is full, create a new layer with zeros
+                new_layer = JengaLayer(orientation="horizontal" if len(self.tower.layers) % 2 == 0 else "vertical")
 
-            # Add the new layer to the tower
-            self.tower.layers.append(new_layer)
-            last_layer = new_layer
+                # Add the new layer to the tower
+                self.tower.layers.append(new_layer)
+                last_layer = new_layer
 
-        position = position.upper()
-        if position == 'A':
-            position_index = 0
-        elif position == 'B':
-            position_index = 1
-        elif position == 'C':
-            position_index = 2
+            position = position.upper()
+            if position == 'A':
+                position_index = 0
+            elif position == 'B':
+                position_index = 1
+            elif position == 'C':
+                position_index = 2
 
-        # Check if the specified place has already a piece (val is 1)
-        if last_layer.pieces[position_index].val == 1:
-            print("\nInvalid move! There's a piece already in that position. Choose a different place.")
+            # Check if the specified place has already a piece (val is 1)
+            if last_layer.pieces[position_index].val == 1:
+                print("\nInvalid move! There's a piece already in that position. Choose a different place.")
+                self.addPiece(input("\nEnter the position to add the piece you just removed (A/B/C): "))
+                return
+            
+            # Set the value of the position to 1
+            last_layer.pieces[position_index].val = 1
+            self.addMove(-1, position_index, True)
+            self.num_moves += 1
+        
+        except:
+            print("\nInvalid move! Please enter a valid move.")
             self.addPiece(input("\nEnter the position to add the piece you just removed (A/B/C): "))
             return
-        
-        # Set the value of the position to 1
-        last_layer.pieces[position_index].val = 1
-        self.addMove(-1, position_index, True)
-        self.num_moves += 1
 
 
     def removePiece(self, move):
+        try:  
+            layer, piece = move[:-1], move[-1]
 
-        layer, piece = move[:-1], move[-1]
+            piece = piece.upper()
+            if piece == 'A':
+                piece_index = 0
+            elif piece == 'B':
+                piece_index = 1
+            elif piece == 'C':
+                piece_index = 2
 
-        piece = piece.upper()
-        if piece == 'A':
-            piece_index = 0
-        elif piece == 'B':
-            piece_index = 1
-        elif piece == 'C':
-            piece_index = 2
+            
+            layer_index = int(layer) - 1
 
-        
-        layer_index = int(layer) - 1
+            # Check if the specified layer is the last one or the second-to-last one
+            if layer_index == len(self.tower.layers) - 1 or layer_index == len(self.tower.layers) - 2:
+                print("\nInvalid move! Cannot remove pieces from the last or second-to-last layer.")
+                self.removePiece(input("\nEnter the layer and piece you want to remove (e.g., 2A): "))
+                return
 
-        # Check if the specified layer is the last one or the second-to-last one
-        if layer_index == len(self.tower.layers) - 1 or layer_index == len(self.tower.layers) - 2:
-            print("\nInvalid move! Cannot remove pieces from the last or second-to-last layer.")
+            # Check if the specified piece is already removed (val is 0)
+            if self.tower.layers[layer_index].pieces[piece_index].val == 0:
+                print("\nInvalid move! The chosen piece has already been removed. Choose a different piece.")
+                self.removePiece(input("\nEnter the layer and piece you want to remove (e.g., 2A): "))
+                return
+            
+            # Set the value of the specified piece to 0
+            self.tower.layers[layer_index].pieces[piece_index].val = 0
+            self.addMove(layer_index, piece_index, False)
+        except: 
+            print("\nInvalid move! Please enter a valid move.")
             self.removePiece(input("\nEnter the layer and piece you want to remove (e.g., 2A): "))
             return
-
-        # Check if the specified piece is already removed (val is 0)
-        if self.tower.layers[layer_index].pieces[piece_index].val == 0:
-            print("\nInvalid move! The chosen piece has already been removed. Choose a different piece.")
-            self.removePiece(input("\nEnter the layer and piece you want to remove (e.g., 2A): "))
-            return
-        
-        # Set the value of the specified piece to 0
-        self.tower.layers[layer_index].pieces[piece_index].val = 0
-        self.addMove(layer_index, piece_index, False)
         
     def addMove(self, layer_index, piece_index, add):
         
@@ -214,7 +224,7 @@ class JengaGame:
         # Returns game_over = True, just in case player wants to backtrack after game over
         # uses a stack or linked list to keep track of moves
         # maybe, can add a limit to undo moves in game loop
-        print("\nBacktracking\n")
+        print("\nBacktracking...\n")
         remove_layer, remove_piece, add_layer, add_piece = self.moves.pop()
         
         print(remove_layer, remove_piece, add_layer, add_piece)
@@ -232,7 +242,11 @@ class JengaGame:
         self.num_moves -= 1
            
     def print_tower(self):
- 
+        
+        print('\033c')  # Clear the terminal
+
+        print("\n---------- JENGA TOWER ----------\n")
+
         max_index_width = len(str(len(self.tower.layers)))
 
         for layer in reversed(self.tower.layers):
@@ -280,7 +294,7 @@ def print_leaderboard(file_name):
         
     sorted_data = quicksort(data)
     print("\n---------- LEADER BOARD ----------\n")
-    print("Name     Number of Moves     Date")
+    print("|Name|---------|Moves|---------|Date|")
     for row in sorted_data:
         print(f"{row[0]}    {row[1]}            {row[2]}")
 
@@ -291,7 +305,6 @@ def game_loop():
     game_over = False
 
     # Printing of layers is reversed so first layer is at the bottom
-    print("\n---------- JENGA TOWER ----------\n")
     game.print_tower()
 
     while not game_over:
