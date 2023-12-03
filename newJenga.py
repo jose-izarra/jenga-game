@@ -16,9 +16,10 @@
             - Sequential Search: updating the tower's balance after each move
             Worst: O(n) - Average: O(n)
 
+            
             Data structures:
             - 3D matrix for the tower
-            - Stack for the moves (deque())
+            - Stack for the moves 
             - List for the leaderboard
 """
 
@@ -26,7 +27,6 @@
 import os
 import csv
 from datetime import datetime
-from collections import deque
 from generateTower import *
 
 class JengaGame:
@@ -40,7 +40,7 @@ class JengaGame:
                 piece.val = 1
         
         # moves stack for backtracking
-        self.moves = deque() 
+        self.moves = []
         # order -> [ [removed_layer_piece_index_1, removed_piece_index_1, added_piece_layer_index_1, added_piece_index_1], [... _2] ]
         
         self.num_moves = 0
@@ -223,7 +223,7 @@ class JengaGame:
         # Undo the last move
         # uses a stack to keep track of moves
         print("\nBacktracking...\n")
-        remove_layer, remove_piece, add_layer, add_piece = self.moves.popleft() # pop the last move
+        remove_layer, remove_piece, add_layer, add_piece = self.moves.pop() # pop the last move
         
         print(remove_layer, remove_piece, add_layer, add_piece) # print the move
         
