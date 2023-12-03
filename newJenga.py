@@ -232,9 +232,24 @@ class JengaGame:
         self.num_moves -= 1
            
     def print_tower(self):
+ 
+        max_index_width = len(str(len(self.tower.layers)))
+
         for layer in reversed(self.tower.layers):
-            print(layer)
+            layer_index = self.tower.layers.index(layer) + 1
+            print(f"{layer_index:>{max_index_width}} ", end="")
             
+            for piece in layer.pieces:
+                if piece.val == 1:
+                    print("|█|", end="")  # Use a filled square for the pieces
+                else:
+                    print("| |", end="")  # Use an empty space for the missing pieces
+            
+            print()
+
+        print(" " * (max_index_width + 1), end="")
+        print(" ".join(f" {col} " for col in "ABC"))
+                
     def game_over(self):
         print("\n---------- GAME OVER ----------\n")
         
@@ -264,7 +279,7 @@ def print_leaderboard(file_name):
         data = list(csv_reader)
         
     sorted_data = quicksort(data)
-    print("\nLadies and Gentleman... The Leaderboard")
+    print("\n---------- LEADER BOARD ----------\n")
     print("Name     Number of Moves     Date")
     for row in sorted_data:
         print(f"{row[0]}    {row[1]}            {row[2]}")
@@ -276,18 +291,18 @@ def game_loop():
     game_over = False
 
     # Printing of layers is reversed so first layer is at the bottom
-    for layer in reversed(game.tower.layers):
-        print(layer)
+    print("\n---------- JENGA TOWER ----------\n")
+    game.print_tower()
 
     while not game_over:
         print(f"\nNumber of moves: {game.num_moves}")
         print(f"Moves list: {game.moves}")
         
         # Instruct the player of backtracking option after first move
-        if game.num_moves > 0: print("\nEnter 4 if you want to undo your move")
+        if game.num_moves > 0: print("\nEnter -1 if you want to undo your move")
         
         # Player makes a move removing piece
-        move = input("Enter the layer and piece you want to remove (e.g., 2A): ")
+        move = input("\nEnter the layer and piece you want to remove (e.g., 2A): ")
 
         if move == "-1":
             game.backtrack()
