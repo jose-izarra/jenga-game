@@ -35,7 +35,7 @@ The game ends when any portion of the tower collapses, caused by either the remo
 ___
 # Data Structures
 
-### 3D matrix (Tower) :
+## 3D matrix (Tower) :
 
 - Since we wanted to make a vertical tower with different levels and sides, we immediately identified that in the game of _Jenga_, a 3-Dimensional Matrix would be the most effective data structure to store and manipulate all the values.
 #### Reasons :
@@ -50,18 +50,44 @@ ___
 5. **Visualization:**
     - The 3D matrix facilitates the visualization of the tower's structure in the code. Developers can easily understand and reason about the state of the tower by examining the matrix, making it a valuable tool for debugging and code comprehension.
 
-### Hash Table (Leaderboard):
+## Array (Leaderboard) :
 
-A Hash Table (or dictionary in Python) is chosen for the leaderboard for the following reasons:
+- The simplest way for us to have stored the leaderboard values was with an array. This was just for convenience sake, since the indexing allowed for us to not have to worry about external values, and due to our design we would not have more than 2 players being tracked at the same time. As such we opted to use a standard Array. Furthermore, there are more reasons for this choice.
+#### Reasons :
 
-1. **Efficient Lookup Time:**
-    - Hash Table provide constant time complexity `O(1)` for key-based operations like looking up a player's score. This ensures that retrieving a player's score from the leaderboard is fast and efficient.
-2. **Unique Player Names:**
-    - Each player's name serves as a unique identifier (key) in the Hash Table. This prevents conflicts or overwrites, ensuring that each player's score is accurately represented.
-3. **Dynamic Player Addition/Removal:**
-    - Hash Table can dynamically grow or shrink based on the number of players participating. This flexibility is crucial in a game where players can join or leave, as it allows for easy updates to the leaderboard.
+1. **Leaderboard Representation:**
+    - An array is utilized to represent the leaderboard in the _Jenga_ game. Each element in the array corresponds to a player, and the array maintains an ordered list of scores.
+2. **Simple and Direct Indexing:**
+    - The array allows for simple and direct indexing, where each player's score is associated with their position in the array. This simplicity facilitates straightforward access and modification of player scores.
+3. **Static Size:**
+    - Unlike a hashmap, the array has a static size, meaning it is pre-allocated with a fixed number of slots. This size determines the maximum number of players that can be accommodated in the leaderboard.
+#### Key Details:
+
+- **Insertion and Retrieval:**
+    - The time complexity for inserting a new score or retrieving an existing score from the array is `O(1)` because array indexing is a constant time operation.
+- **Sorting (if needed):**
+    - If sorting is required for the leaderboard, the time complexity would be O(n log n) for the sorting operation. However, this might be a periodic operation rather than occurring after every score update.
 
 
+## Stack (Move Tracking):
+
+- For the tracking of the moves we used a stack. This was a simple choice especially because of the nature of the data structure. Simply put, we would have the moves placed at the top of the stack following a LIFO, which would make backtracking an easy operation for us when it came for the time to implement it.
+
+1. **Backtracking Operations:**
+    - A stack is employed to facilitate backtracking operations in the _Jenga_ game. As a player makes moves and can potentially undo them, the stack keeps track of the sequence of moves, allowing for efficient undoing of the last move.
+2. **Last-In-First-Out (LIFO):**
+    - The stack follows the Last-In-First-Out (LIFO) principle, where the most recently added move is the first to be removed. This aligns with the nature of backtracking, where the latest move needs to be undone before previous moves.
+3. **Efficient Undoing:**
+    - The stack's LIFO behavior allows for efficient undoing of moves. Popping the top of the stack corresponds to undoing the last move made in the game.
+#### Key Details:
+
+- **Push and Pop Operations:**
+    - The time complexity for push (adding a move to the stack) and pop (removing the last move from the stack) operations is typically `O(1)`. These operations are constant time and don't depend on the size of the stack.
+
+#### Considerations in the _Jenga_ Game:
+
+- **Undoing Moves:**
+    - The stack is crucial for implementing the backtracking mechanism in the game, allowing a player to undo moves and explore different paths in the gameplay given the current scenario.
 
 ___
 # Algorithms:
@@ -78,7 +104,7 @@ ___
 #####  **Key Advantages:**
 
 1. **Flexibility:**
-    - Backtracking provides flexibility by allowing players to explore different move sequences and strategies. It adds a layer of interactivity and engagement as players can experiment without the fear of irreversible consequences.
+    - Backtracking provides flexibility by allowing players to explore different move sequences. 
 2. **Error Correction:**
     - In a game with complex rules and potential for mistakes, backtracking serves as a mechanism for error correction. If a player realizes that a move has negatively impacted the tower's stability, they can backtrack to a previous state and try an alternative approach.
 
@@ -93,16 +119,15 @@ ___
     - QuickSort is employed to sort the leaderboard in descending order based on player scores. This ensures that the player with the highest score is positioned at the top of the leaderboard, providing a clear and easily interpretable ranking.
 
 ##### **Key Advantages:**
-
-1. **Efficient Sorting:**
+1. **Recursion:**
+	- QuickSort utilizes recursion as a key element of its sorting strategy. The algorithm recursively divides the array of scores into smaller subarrays, sorting each subarray independently.
+2. **Efficient Sorting:**
     - QuickSort in the context of a leaderboard, where scores are dynamic and change frequently, the ability to quickly re-sort the leaderboard is essential for maintaining an up-to-date ranking.
-2. **Descending Order:**
-    - Sorting in descending order is important for leaderboard presentation. It allows players to easily identify the top performers. QuickSort, with its average time complexity of O(n log n), ensures fast sorting even for larger leaderboards.
-3. **Consistent User Experience:**
-    - A consistently sorted leaderboard provides a better user experience. Players can quickly assess their standing and compare their scores with others, fostering competition and engagement.
+3. **Descending Order:**
+    - Sorting in descending order is important for leaderboard presentation. QuickSort, with its average time complexity of O(n log n), ensures fast sorting even for larger leaderboards if this were to support a larger playerbase.
 
 
-## Linear Search for Tower Balance: O(n)
+## Linear Search for Tower Probabilities: O(n)
 
 - To update the probabilities of the towers layers and pieces, we use Linear Search which has a time complexity of O(n), meaning that we go through the entire tower as one piece's change will impact the probabilities of the layers in each as well.
 
@@ -116,6 +141,13 @@ ___
 - The main thing to mention here is that we know this algorithm is not perfect for the job, but it gets it done with a reasonable accuracy. Specifically considering the case that when a piece is removed and the tower does not fall, this would imply that the probabilities of the tower falling will only be updated to the layers above the piece that was removed. This in our case could be added as an improvement, but the worst case scenario if we were only to update the layers above the removed piece would still be done in linear `O(n)` time, so we did not think it that big of an issue.
 ___
 # Project Analysis: Time Complexity
+
+## Table Summary
+| **Algorithm** | **Decription** | **Time Complexity (Worst Case)** | **Time Complexity (Average Case)** |
+|-|-|-| - |
+| **Backtracking** | Ability to go back after each move if you don't feel you removed the right piece | O(n)| O(n) |  
+| **QuickSort** | sed to sort the leaderboard in descending order | O(n^2) | O(n log n)|
+| **Linear/Sequential Search**| Used to update the tower's balance and probability of collapsing after each move made| O(n) | O(n) |
 
 ## Backtracking : O(n)
 
@@ -142,7 +174,6 @@ ___
     
     - The leaderboard likely contains a small number of scores, and the data is not expected to be highly unorganized. QuickSort is well-suited for efficiently sorting small to moderately-sized arrays with random or semi-random data.
 
-
 ## Linear Search : O(n)
 
 #### Time Complexity:
@@ -152,3 +183,4 @@ ___
 - **Worst Case:**
     - For the worst case, Linear search also has an O(n) time complexity. In the worst case, the search operation needs to traverse the entire tower matrix to evaluate its stability. Which although a negligible for the most part in this game since we do not have to scale it the game, we would normally look for a better method to look over the probabilities
 
+___
