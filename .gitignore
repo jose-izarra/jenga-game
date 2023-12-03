@@ -1,3 +1,4 @@
 _pycache
 .venv
 scores
+__pycache__
