@@ -103,7 +103,7 @@ ___
     - A consistently sorted leaderboard provides a better user experience. Players can quickly assess their standing and compare their scores with others, fostering competition and engagement.
 
 ___
-### Project Analysis: Time Complexity (Big )
+### Project Analysis: Time Complexity
 
 ##### Backtracking:
 
