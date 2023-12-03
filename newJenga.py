@@ -46,7 +46,7 @@ class JengaGame:
         self.num_moves = 0
         
 
-    def checkStability(self):
+    def checkStability(self): # Time complexity: Average O(n), Worst O(n)
 
         x_balance = 0
         y_balance = 0
@@ -90,15 +90,15 @@ class JengaGame:
                 elif layer.pieces[0].val == 0 and layer.pieces[2].val == 0: # if both left and right pieces are missing, balance stays the same
                     y_balance += 0
                 elif layer.pieces[1].val == 0: # if middle piece is missing, balance stays the same
-                    y_balance += 0
-                elif layer.pieces[2].val == 0:
+                    y_balance += 0 
+                elif layer.pieces[2].val == 0: # if right piece is missing, balance shifts to the right
                     y_balance += 1
-                elif layer.pieces[0].val == 0:
+                elif layer.pieces[0].val == 0: # if left piece is missing, balance shifts to the left
                     y_balance -= 1
 
         # Distance between two points formula to get the total balance
-        balance = (x_balance**2 + y_balance**2)**0.5
-        print(f"\nBalance: {balance}")
+        balance = (x_balance**2 + y_balance**2)**0.5 
+        print(f"\nBalance: {balance}") 
 
         # Message to player depending on the balance of the tower
         if balance == 0:
@@ -126,13 +126,13 @@ class JengaGame:
             return False
         
 
-    def addPiece(self, position):
+    def addPiece(self, position): # Time complexity: Average O(1), Worst O(1)
         
         # Adds a piece to the top of the tower
         # Has to check which spots are empty in the top layer before adding a new layer
-        # Get the last layer
+
         try:
-            last_layer = self.tower.layers[-1]
+            last_layer = self.tower.layers[-1] # Get the last layer of the tower
 
             # Check if the last layer is full
             if all(piece.val == 1 for piece in last_layer.pieces):
@@ -168,7 +168,7 @@ class JengaGame:
             return
 
 
-    def removePiece(self, move):
+    def removePiece(self, move): # Time complexity: Average O(1), Worst O(1)
         try:  # Try to get the layer and piece from the input
             layer, piece = move[:-1], move[-1] # Get the layer and piece from the input
 
@@ -203,7 +203,7 @@ class JengaGame:
             self.removePiece(input("\nEnter the layer and piece you want to remove (e.g., 2A): "))
             return
         
-    def addMove(self, layer_index, piece_index, add):
+    def addMove(self, layer_index, piece_index, add): # Time complexity: Average O(1), Worst O(1)
         
         # append the new move to stack
         
@@ -211,49 +211,47 @@ class JengaGame:
         if not add:
             self.moves.append([layer_index, piece_index]) # add the removed piece
             
-        else:
+        else: 
             self.moves[-1].append(layer_index)
             self.moves[-1].append(piece_index)
 
-    def backtrack(self):
+    def backtrack(self): # Time complexity: Average O(1), Worst O(1)
         if not self.num_moves:
-            print("BRUH. You're at the starting point, you can't go back")
+            print("BRUH. You're at the starting point, you can't go back") # Error message
             return
         
         # Undo the last move
-        # Returns game_over = True, just in case player wants to backtrack after game over
-        # uses a stack or linked list to keep track of moves
-        # maybe, can add a limit to undo moves in game loop
+        # uses a stack to keep track of moves
         print("\nBacktracking...\n")
-        remove_layer, remove_piece, add_layer, add_piece = self.moves.popleft()
+        remove_layer, remove_piece, add_layer, add_piece = self.moves.popleft() # pop the last move
         
-        print(remove_layer, remove_piece, add_layer, add_piece)
+        print(remove_layer, remove_piece, add_layer, add_piece) # print the move
         
         
         # reverse engineer the process
-        self.tower.layers[remove_layer].pieces[remove_piece].val = 1
-        self.tower.layers[add_layer].pieces[add_piece].val = 0
+        self.tower.layers[remove_layer].pieces[remove_piece].val = 1 # add the removed piece back
+        self.tower.layers[add_layer].pieces[add_piece].val = 0 # remove the added piece
         
-        last_layer = self.tower.layers[-1]
+        last_layer = self.tower.layers[-1] # Get the last layer of the tower
         
         
-        if all(piece.val == 0 for piece in last_layer.pieces):
+        if all(piece.val == 0 for piece in last_layer.pieces): # if the last layer is empty, remove it
             self.tower.layers.remove(last_layer)
         self.num_moves -= 1
            
-    def print_tower(self):
+    def print_tower(self): # Time complexity: Average O(n), Worst O(n) (because number of pieces in each layer is constant but number of layers is not)
         
         print('\033c')  # Clear the terminal
 
         print("\n---------- JENGA TOWER ----------\n")
 
-        max_index_width = len(str(len(self.tower.layers)))
+        max_index_width = len(str(len(self.tower.layers))) # Get the max width of the index column
 
-        for layer in reversed(self.tower.layers):
+        for layer in reversed(self.tower.layers): # Print the layers in reverse order
             layer_index = self.tower.layers.index(layer) + 1
-            print(f"{layer_index:>{max_index_width}} ", end="")
+            print(f"{layer_index:>{max_index_width}} ", end="") # Print the layer index
             
-            for piece in layer.pieces:
+            for piece in layer.pieces: # Print the pieces in the layer
                 if piece.val == 1:
                     print("|█|", end="")  # Use a filled square for the pieces
                 else:
@@ -262,9 +260,9 @@ class JengaGame:
             print()
 
         print(" " * (max_index_width + 1), end="")
-        print(" ".join(f" {col} " for col in "ABC"))
+        print(" ".join(f" {col} " for col in "ABC")) # Print the column letters
                 
-    def game_over(self):
+    def game_over(self): # Time complexity: Average O(1), Worst O(1)
         print("\n---------- GAME OVER ----------\n")
         
         name = input("Input your name to be added to the Leaderboard! -> ")
@@ -272,11 +270,10 @@ class JengaGame:
         return name, date
     
 
-
 def sorting_key(row):
     return int(row[1])
 
-def quicksort(data_arr):
+def quicksort(data_arr): # Time complexity: Average O(n log n), Worst O(n^2)
     if len(data_arr) <= 1:
         return data_arr
 
@@ -284,9 +281,9 @@ def quicksort(data_arr):
     left = [x for x in data_arr if sorting_key(x) > sorting_key(pivot)]
     middle = [x for x in data_arr if sorting_key(x) == sorting_key(pivot)]
     right = [x for x in data_arr if sorting_key(x) < sorting_key(pivot)]
-    return quicksort(left) + middle + quicksort(right)
+    return quicksort(left) + middle + quicksort(right) # Recursively sort the left and right subarrays and concatenate them with the middle array
 
-def print_leaderboard(file_name):
+def print_leaderboard(file_name): # Time complexity: Average O(n), Worst O(n)
     with open(file_name, "r") as csv_file:
         csv_reader = csv.reader(csv_file)
         header = next(csv_reader)  # Skip the header row
@@ -317,13 +314,13 @@ def game_loop():
         # Player makes a move removing piece
         move = input("\nEnter the layer and piece you want to remove (e.g., 2A): ")
 
-        if move == "-1":
+        if move == "-1": # If the player wants to backtrack
             game.backtrack()
             game.print_tower()
             continue
         
                     
-        game.removePiece(move)
+        game.removePiece(move) # Remove the piece from the tower
         
         # Print tower
         game.print_tower()
@@ -344,12 +341,12 @@ def game_loop():
         # Print tower
         game.print_tower()
 
-        if not game.checkStability():
+        if not game.checkStability(): # Check tower stability
             print("\nTower falls. Game over!")
             game_over = True
     
     
-    name, date = game.game_over()
+    name, date = game.game_over() # Get the player's name and date of game over
 
     data = [name, game.num_moves, date]
     
