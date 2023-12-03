@@ -286,7 +286,7 @@ def game_loop():
         print(f"Moves list: {game.moves}")
         
         # Instruct the player of backtracking option after first move
-        if game.num_moves > 0: print("\nEnter 4 if you want to undo your move")
+        if game.num_moves > 0: print("\nEnter -1 if you want to undo your move")
         
         # Player makes a move removing piece
         move = input("Enter the layer and piece you want to remove (e.g., 2A): ")
