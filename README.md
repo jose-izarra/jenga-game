@@ -56,12 +56,12 @@ A Hash Table (or dictionary in Python) is chosen for the leaderboard for the fol
 3. **Dynamic Player Addition/Removal:**
     - Hash Table can dynamically grow or shrink based on the number of players participating. This flexibility is crucial in a game where players can join or leave, as it allows for easy updates to the leaderboard.
 
-##### Linked List (Backtracking)
+### Linked List (Backtracking)
 
-- A linked list is chosen for tracking moves in order to facilitate backtracking in the game. Here's why a linked list is a suitable choice:
+- A linked list is chosen for tracking moves in order to facilitate backtracking in the game. Here's why we chose a linked list for the Jenga Game:
 
 1. **Sequential Order:**
-    - Linked lists maintain the order of elements, which is essential for tracking moves chronologically. Each node in the linked list represents a move, and the order of nodes corresponds to the order in which moves were made during the game.
+    - Linked lists maintain the order of elements, which is essential for tracking moves in order. Each node in the linked list represents a move, and the order of nodes corresponds to the order in which moves were made during the game.
 2. **Constant Time Insertion/Deletion:**
     - Inserting or deleting a move from a linked list is a constant time `O(1)` operation when given the node to be added or removed. This is advantageous for backtracking, as it allows for efficient undoing of moves.
 3. **Memory Efficiency:**
@@ -74,7 +74,7 @@ ___
 
 #### Backtracking:
 
-- Due to this being a digital game we wanted to implement backtracking so that the player could undo their moves. Due to implementing the Linked List Data Stucture, we can make these moves in O(n)
+- Due to this being a digital game we wanted to implement backtracking so that the player could undo their moves. Due to implementing the Linked List Data Stucture, we can make these moves in `O(1)` time. 
 
 - **Undoing Moves:**
     - Backtracking is used to allow players to undo moves. In a game like _Jenga_, where the goal is to maintain the stability of the tower, giving players the ability to backtrack allows them to reconsider their moves if they feel they have removed the wrong piece. This feature enhances the user experience and strategic decision-making.
