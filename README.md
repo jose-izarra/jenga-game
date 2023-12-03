@@ -17,7 +17,7 @@ ___
 
 ___
 
-### Unfamiliar with _Jenga_? <div id='id-section1'/>
+# Unfamiliar with _Jenga_? <div id='id-section1'/>
 
 Rules and objective of the game:
 
@@ -29,7 +29,7 @@ Once a level contains three blocks, it is complete and may not have any more blo
 
 The game ends when any portion of the tower collapses, caused by either the removal of a block or its new placement. The last player to complete a turn before the collapse is the winner.
 ___
-## Data Structures
+# Data Structures
 
 ### 3D matrix (Tower) :
 
@@ -60,16 +60,16 @@ A Hash Table (or dictionary in Python) is chosen for the leaderboard for the fol
 
 
 ___
-## Algorithms:
+# Algorithms:
 
-### Backtracking with a Stack: O(n)
+## Backtracking with a Stack: O(n)
 
 1. **Undoing Moves (Backtracking):**
-    - Undoing a move with a stack involves popping the top element of the stack. This operation is a constant time operation (`O(1)`) since it directly accesses the top of the stack.
+    - Undoing a move with a stack involves popping the top element of the stack. This operation is a constant time operation `O(1)` since it directly accesses the top of the stack.
 2. **Inserting Moves (Adding to the Stack):**
-    - When a new move is made, it needs to be pushed onto the stack. This operation is also a constant time operation (`O(1)`) as it involves adding an element to the top of the stack.
+    - When a new move is made, it needs to be pushed onto the stack. This operation is also a constant time operation `O(1)` as it involves adding an element to the top of the stack.
 3. **Deleting Moves (Removing from the Stack):**
-    - Removing a move during backtracking involves popping the top element from the stack. Like inserting moves, this operation is a constant time operation (`O(1)`).
+    - Removing a move during backtracking involves popping the top element from the stack. Like inserting moves, this operation is a constant time operation `O(1)`.
 
 #####  **Key Advantages:**
 
@@ -83,7 +83,7 @@ ___
 - **Space Complexity:**
     - Using a stack for backtracking may have implications for space complexity, especially if the stack becomes large. However, in practice, for games such as _Jenga_ with a moderate number of moves, the space usage is often reasonable.
 
-### QuickSort : O(n log n)
+## QuickSort : O(n log n)
 
 - **Leaderboard Sorting:**
     - QuickSort is employed to sort the leaderboard in descending order based on player scores. This ensures that the player with the highest score is positioned at the top of the leaderboard, providing a clear and easily interpretable ranking.
@@ -98,7 +98,7 @@ ___
     - A consistently sorted leaderboard provides a better user experience. Players can quickly assess their standing and compare their scores with others, fostering competition and engagement.
 
 
-### Linear Search for Tower Probabilities: O(n)
+## Linear Search for Tower Probabilities: O(n)
 
 - To update the probabilities of the towers layers and pieces, we use Linear Search which has a time complexity of O(n), meaning that we go through the entire tower as one piece's change will impact the probabilities of the layers in each as well.
 
@@ -111,9 +111,9 @@ ___
 
 - The main thing to mention here is that we know this algorithm is not perfect for the job, but it gets it done with a reasonable accuracy. Specifically considering the case that when a piece is removed and the tower does not fall, this would imply that the probabilities of the tower falling will only be updated to the layers above the piece that was removed. This in our case could be added as an improvement, but the worst case scenario if we were only to update the layers above the removed piece would still be done in linear `O(n)` time, so we did not think it that big of an issue.
 ___
-## Project Analysis: Time Complexity
+# Project Analysis: Time Complexity
 
-### Backtracking : O(n)
+## Backtracking : O(n)
 
 - The time complexity of backtracking with a stack depends on the specific operations done  during backtracking. The operations of note would involve:
 
@@ -121,12 +121,12 @@ ___
     - In a stack, undoing a move involves popping the most recent move, thus making the previous move now the current one. This operation is typically done in constant time `O(1)`.
     
 1. **Inserting Moves (Adding to the Stack):**
-    - When a new move is made, it needs to be added to the stack via a push. This operation is essentially just adding the new move into the top of the stack and is ususally a constant time operation  of  `O(1)`.
+    - When a new move is made, it needs to be added to the stack via a push. This operation is essentially just adding the new move into the top of the stack and is usually a constant time operation  of  `O(1)`.
     
 1. **Deleting Moves (Removing from the Stack):**
-    - Similar to Undoing Moves, removing a move during backtracking involves popping from the stack. This operation is, again, a constant time operation `O(1)` because, in a stack, the move will be at the top. For all intents and purposes this is the same as backtracking.
+    - Similar to Undoing Moves, removing a move during backtracking involves popping from the stack. This operation is, again, a constant time operation `O(1)` because, in a stack, the move will be at the top. For all intents and purposes, this is the same as backtracking.
 
-### QuickSort : O(n log n)
+## QuickSort : O(n log n)
 
 1. **Average Case Time Complexity:**
     
@@ -136,15 +136,15 @@ ___
     - The worst-case time complexity of QuickSort is `O(n^2)`. This occurs when the pivot is consistently chosen as the minimum or maximum element, leading to unbalanced partitioning. However, in practice, the worst case is uncommon, especially with good pivot selection strategies.
 3. **Data Characteristics:**
     
-    - The leaderboard likely contains a small number of scores, and the data is not expected to be highly unorganized. QuickSort is well-suited for efficiently sorting small to moderately sized arrays with random or semi-random data.
+    - The leaderboard likely contains a small number of scores, and the data is not expected to be highly unorganized. QuickSort is well-suited for efficiently sorting small to moderately-sized arrays with random or semi-random data.
 
 
-### Linear Search : O(n)
+## Linear Search : O(n)
 
 #### Time Complexity:
 
 - **Average Case:**
-    - For the average case, Linear search will run at (quite obviously) O(n) time complexity, where n is the size of the tower matrix. Linear search sequentially examines elements and layers in this case to make sure that any conditions being met impact the towers probability of falling
+    - For the average case, Linear search will run at (quite obviously) O(n) time complexity, where n is the size of the tower matrix. Linear search sequentially examines elements and layers in this case to make sure that any conditions being met impact the tower's probability of falling
 - **Worst Case:**
     - For the worst case, Linear search also has an O(n) time complexity. In the worst case, the search operation needs to traverse the entire tower matrix to evaluate its stability. Which although a negligible for the most part in this game since we do not have to scale it the game, we would normally look for a better method to look over the probabilities
 
