@@ -1,4 +1,6 @@
-<img src="image.png" width="200" height="200">
+<img src="image.png" width="100" height="100">
+
+``Run newJenga.py to play the game!``
 
 # Description
 ___
