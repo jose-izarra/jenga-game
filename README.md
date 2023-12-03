@@ -14,7 +14,9 @@ ___
 |Algorithms| Section of listed Algorithms as well as why and how we implemented them into the project|
 |Project Analysis: Time Complexity| This section delves into the time complexity of the chosen Algorithms and how they function with the Data structures that we have implemented|
 
+
 ___
+
 ### Unfamiliar with _Jenga_? <div id='id-section1'/>
 
 Rules and objective of the game:
@@ -96,7 +98,7 @@ ___
     - A consistently sorted leaderboard provides a better user experience. Players can quickly assess their standing and compare their scores with others, fostering competition and engagement.
 
 
-### Linear Search for Tower Probabilities:
+### Linear Search for Tower Probabilities: O(n)
 
 - To update the probabilities of the towers layers and pieces, we use Linear Search which has a time complexity of O(n), meaning that we go through the entire tower as one piece's change will impact the probabilities of the layers in each as well.
 
