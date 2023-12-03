@@ -1,24 +1,27 @@
-# Algorithms and Data Structures Final Project
-# Jenga Game
-# By: Rodrigo Sagastegui, Sebastian Perilla, Jose Izarra and Massimo Giuseppe
+"""
 
-# Description: This program is a Jenga game that allows the user to play the game and keep track of the number of moves
-# before the tower falls. The program also keeps track of the leaderboard, which is a list of players and their scores.
+    Welcome to our ADS Jenga Game! 
+        By: Rodrigo Sagastegui, Sebastian Perilla, Jose Izarra and Massimo Giuseppe
 
-# Algorithms:
-# - Backtracking: you will be able to go back after each move if you don't feel you removed the right piece
-#   Worst: O(n) - Average: O(n) 
+        This is a game of Jenga we made entirely from scratch using algorithms and data structures. 
+        
+        Some features of our game are: 
 
-# - QuickSort: to sort the leaderboard in descending order
-#   Worst: O(n^2) - Average: O(n log n)
+            Algorithms:
+            - Backtracking: you will be able to go back after each move if you don't feel you removed the right piece
+            Worst: O(n) - Average: O(n) 
 
-# - Sequential Search: updating the tower's balance after each move
-#   Worst: O(n) - Average: O(n)
+            - QuickSort: to sort the leaderboard in descending order
+            Worst: O(n^2) - Average: O(n log n)
 
-# Data structures:
-# - 3D matrix for the tower
-# - Stack for the moves (deque())
-# - List for the leaderboard
+            - Sequential Search: updating the tower's balance after each move
+            Worst: O(n) - Average: O(n)
+
+            Data structures:
+            - 3D matrix for the tower
+            - Stack for the moves (deque())
+            - List for the leaderboard
+"""
 
 
 import os
@@ -294,7 +297,7 @@ def print_leaderboard(file_name):
     print("\n---------- LEADER BOARD ----------\n")
     print("|Name|---------|Moves|---------|Date|")
     for row in sorted_data:
-        print(f"{row[0]}    {row[1]}            {row[2]}")
+        print(f"|{row[0]}|---------|{row[1]}|---------|{row[2]}|")
 
 
 # Game loop

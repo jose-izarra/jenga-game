@@ -1,1 +1,0 @@
-print(remove_layer, remove_piece, add_layer, add_piece)
