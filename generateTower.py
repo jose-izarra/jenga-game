@@ -10,8 +10,6 @@ class JengaPiece:
     def __repr__(self):
         return f"[{self.val}]"
 
-        # return f"[{self.left}, {self.middle}, {self.right}]"
-
 
 class JengaLayer:
     def __init__(self, orientation):
@@ -28,29 +26,3 @@ class JengaTower:
 
     def __repr__(self):
         return repr(self.layers)
-
-    # Not working!!
-    def render(self):
-        x = 0
-        y = 0
-        for layer in self.layers:
-            for piece in layer.pieces:
-                print(f"\033[{y};{x}H", end="")
-                print(piece, end="")
-                x += len(str(piece)) + 1
-            x = 0
-            y += 1
-        print()
-
-
-# height = 3
-# tower = JengaTower(height)
-
-# # Modify the middle value of all pieces in the chosen layer
-# for layer in tower.layers:
-#     for piece in layer.pieces:
-#         piece.val = 1
-
-# # Print each layer on a new line
-# for layer in tower.layers:
-#     print(layer)

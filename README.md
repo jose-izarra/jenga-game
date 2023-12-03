@@ -1,3 +1,5 @@
+<img src="image.png" width="200" height="200">
+
 # Description
 ___
 Welcome to our project!
@@ -148,4 +150,3 @@ ___
 - **Worst Case:**
     - For the worst case, Linear search also has an O(n) time complexity. In the worst case, the search operation needs to traverse the entire tower matrix to evaluate its stability. Which although a negligible for the most part in this game since we do not have to scale it the game, we would normally look for a better method to look over the probabilities
 
-___
