@@ -1,31 +1,30 @@
-# To do:
-# Avg and worst runtime complexity of each function, in a READ.ME file and comments
-# Complexity in code comments and in the READ.ME file analysis. 
+# Algorithms and Data Structures Final Project
+# Jenga Game
+# By: Rodrigo Sagastegui, Sebastian Perilla, Jose Izarra and Massimo Giuseppe
 
-# To add in the code:
-# - Add a function to check if the tower is stable
-# - Add a function
-# - Add a timer for each player which will later impact there scores. Add if timer runs out, plaer loses and is skipped.
-# The timer starts for the next player the moment the previous player makes a move. Timer starts with 50 seconds, which score = 10 * seconds left
-
-# - The array of scores will be sorted in descending order, so the player with the highest score will be at the top of the leaderboard. 
-# Use QuickSort to sort the array of scores. Analyze time complexity.
-
-# - Integrate graphics for the leaderboard and the tower in the game logic
-
-# Data structures:
-# - 3D matrix for the tower
-# - Hashmap for the leaderboard, key = player name, value = score
-# - Stack list for the moves, to be able to backtrack
+# Description: This program is a Jenga game that allows the user to play the game and keep track of the number of moves
+# before the tower falls. The program also keeps track of the leaderboard, which is a list of players and their scores.
 
 # Algorithms:
 # - Backtracking: you will be able to go back after each move if you don't feel you removed the right piece
+#   Worst: O(n) - Average: O(n) 
+
 # - QuickSort: to sort the leaderboard in descending order
+#   Worst: O(n^2) - Average: O(n log n)
+
+# - Sequential Search: updating the tower's balance after each move
+#   Worst: O(n) - Average: O(n)
+
+# Data structures:
+# - 3D matrix for the tower
+# - Stack for the moves (deque())
+# - List for the leaderboard
 
 
 import os
 import csv
 from datetime import datetime
+from collections import deque
 from generateTower import *
 
 class JengaGame:
@@ -39,15 +38,11 @@ class JengaGame:
                 piece.val = 1
         
         # moves stack for backtracking
-        self.moves = []   
+        self.moves = deque() 
         # order -> [ [removed_layer_piece_index_1, removed_piece_index_1, added_piece_layer_index_1, added_piece_index_1], [... _2] ]
         
         self.num_moves = 0
         
-
-    def calculateProbability(self, block):
-        # Placeholder for probability calculation
-        return 0.5
 
     def checkStability(self):
 
@@ -57,14 +52,16 @@ class JengaGame:
         for i, layer in enumerate(self.tower.layers):
             # Condition 1: Right and middle pieces missing or left and middle pieces missing
             if i < len(self.tower.layers) - 1:
-            # Condition 1: Right and middle pieces missing or left and middle pieces missing
+            
                 if (layer.pieces[0].val == 1 and layer.pieces[1].val == 0 and layer.pieces[2].val == 0) or \
                 (layer.pieces[0].val == 0 and layer.pieces[1].val == 0 and layer.pieces[2].val == 1):
+                    print("\n (╯°□°）╯︵ ┻━┻")
                     print("\nNOOO!!! You removed the wrong piece (╥﹏╥)")
                     return False
 
             # Condition 2: No pieces left in the layer
                 if layer.pieces[0].val == 0 and layer.pieces[1].val == 0 and layer.pieces[2].val == 0:
+                    print("\n (╯°□°）╯︵ ┻━┻")
                     print("\nNOOO!!! No more pieces left in that layer (╥﹏╥)")
                     return False
             
@@ -101,6 +98,7 @@ class JengaGame:
         balance = (x_balance**2 + y_balance**2)**0.5
         print(f"\nBalance: {balance}")
 
+        # Message to player depending on the balance of the tower
         if balance == 0:
             print("\nTower is stable ヽ(´▽`)/")
             return True
@@ -128,7 +126,7 @@ class JengaGame:
 
     def addPiece(self, position):
         
-        # Add a piece to the top of the tower
+        # Adds a piece to the top of the tower
         # Has to check which spots are empty in the top layer before adding a new layer
         # Get the last layer
         try:
@@ -143,9 +141,9 @@ class JengaGame:
                 self.tower.layers.append(new_layer)
                 last_layer = new_layer
 
-            position = position.upper()
+            position = position.upper() # Convert to uppercase to avoid errors
             if position == 'A':
-                position_index = 0
+                position_index = 0 # Set the index of the position
             elif position == 'B':
                 position_index = 1
             elif position == 'C':
@@ -153,26 +151,26 @@ class JengaGame:
 
             # Check if the specified place has already a piece (val is 1)
             if last_layer.pieces[position_index].val == 1:
-                print("\nInvalid move! There's a piece already in that position. Choose a different place.")
-                self.addPiece(input("\nEnter the position to add the piece you just removed (A/B/C): "))
+                print("\nInvalid move! There's a piece already in that position. Choose a different place.") # Error message
+                self.addPiece(input("\nEnter the position to add the piece you just removed (A/B/C): ")) # Ask for a new position
                 return
             
             # Set the value of the position to 1
             last_layer.pieces[position_index].val = 1
-            self.addMove(-1, position_index, True)
-            self.num_moves += 1
+            self.addMove(-1, position_index, True) # Add the move to the stack for backtracking
+            self.num_moves += 1 # Increment the number of moves counter
         
-        except:
+        except: # If the user enters an invalid position
             print("\nInvalid move! Please enter a valid move.")
             self.addPiece(input("\nEnter the position to add the piece you just removed (A/B/C): "))
             return
 
 
     def removePiece(self, move):
-        try:  
-            layer, piece = move[:-1], move[-1]
+        try:  # Try to get the layer and piece from the input
+            layer, piece = move[:-1], move[-1] # Get the layer and piece from the input
 
-            piece = piece.upper()
+            piece = piece.upper() # Convert to uppercase to avoid errors
             if piece == 'A':
                 piece_index = 0
             elif piece == 'B':
@@ -181,24 +179,24 @@ class JengaGame:
                 piece_index = 2
 
             
-            layer_index = int(layer) - 1
+            layer_index = int(layer) - 1 # Set the index of the layer
 
             # Check if the specified layer is the last one or the second-to-last one
             if layer_index == len(self.tower.layers) - 1 or layer_index == len(self.tower.layers) - 2:
-                print("\nInvalid move! Cannot remove pieces from the last or second-to-last layer.")
+                print("\nInvalid move! Cannot remove pieces from the last or second-to-last layer.") # Error message
                 self.removePiece(input("\nEnter the layer and piece you want to remove (e.g., 2A): "))
                 return
 
             # Check if the specified piece is already removed (val is 0)
             if self.tower.layers[layer_index].pieces[piece_index].val == 0:
-                print("\nInvalid move! The chosen piece has already been removed. Choose a different piece.")
+                print("\nInvalid move! The chosen piece has already been removed. Choose a different piece.") # Error message
                 self.removePiece(input("\nEnter the layer and piece you want to remove (e.g., 2A): "))
                 return
             
             # Set the value of the specified piece to 0
             self.tower.layers[layer_index].pieces[piece_index].val = 0
-            self.addMove(layer_index, piece_index, False)
-        except: 
+            self.addMove(layer_index, piece_index, False) # Add the move to the stack for backtracking
+        except: # If the user enters an invalid move
             print("\nInvalid move! Please enter a valid move.")
             self.removePiece(input("\nEnter the layer and piece you want to remove (e.g., 2A): "))
             return
@@ -209,7 +207,7 @@ class JengaGame:
         
         # first you add the removed piece, and then the added piece
         if not add:
-            self.moves.append([layer_index, piece_index])
+            self.moves.append([layer_index, piece_index]) # add the removed piece
             
         else:
             self.moves[-1].append(layer_index)
@@ -225,7 +223,7 @@ class JengaGame:
         # uses a stack or linked list to keep track of moves
         # maybe, can add a limit to undo moves in game loop
         print("\nBacktracking...\n")
-        remove_layer, remove_piece, add_layer, add_piece = self.moves.pop()
+        remove_layer, remove_piece, add_layer, add_piece = self.moves.popleft()
         
         print(remove_layer, remove_piece, add_layer, add_piece)
         
