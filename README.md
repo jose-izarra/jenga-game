@@ -151,7 +151,7 @@ ___
 
 ## Backtracking : `O(n)`
 
-- The time complexity of backtracking with a stack depends on the specific operations done  during backtracking. The operations of note would involve:
+- The time complexity of backtracking with a stack depends on the specific operations done during backtracking. In the worst possible scenario we would have to go through the entire stack giving us a time complexity of `O(n)`, however, the operations that go through the stack themselves are of `O(1)` time complexity. The operations of note would involve:
 
 1. **Undoing Moves (Backtracking):**
     - In a stack, undoing a move involves popping the most recent move, thus making the previous move now the current one. This operation is typically done in constant time `O(1)`.
