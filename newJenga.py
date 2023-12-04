@@ -28,6 +28,7 @@ import os
 import csv
 from datetime import datetime
 from generateTower import *
+from collections import deque
 
 class JengaGame:
     def __init__(self, tower_height):
@@ -39,11 +40,12 @@ class JengaGame:
             for piece in layer.pieces:
                 piece.val = 1
         
-        # Moves stack for backtracking
-        self.moves = []
+        # Circular queue for backtracking
+        self.moves = deque()
         # order -> [ [removed_layer_piece_index_1, removed_piece_index_1, added_piece_layer_index_1, added_piece_index_1], [... _2] ]
         
         self.num_moves = 0 # Keep track of number of moves
+        self.num_backtracks = 0
         
 
     def checkStability(self): # Time complexity: Average O(n), Worst O(n)
@@ -217,19 +219,29 @@ class JengaGame:
         else: 
             self.moves[-1].append(layer_index)  # add the added piece
             self.moves[-1].append(piece_index)
+            
+        # For efficiency, only keep the last 4 moves
+        if len(self.moves) >= 5:   # O(1)
+            self.moves.popleft()  # every 5 moves, delete the smallest one 
 
     def backtrack(self): # Time complexity: Average O(1), Worst O(1)
         if not self.num_moves:
+            clear() 
             print("BRUH. You're at the starting point, you can't go back") # Error message
             return
+        if self.num_backtracks >= 3:
+            clear()
+            print("\nYou can only backtrack 3 times")
+            return
+        
+        clear() # clear the terminal for better visibility
+        print("\nBacktracking...\n")
         
         # Undo the last move
         # uses a stack to keep track of moves
-        print("\nBacktracking...\n")
         remove_layer, remove_piece, add_layer, add_piece = self.moves.pop() # pop the last move
         
         print(remove_layer, remove_piece, add_layer, add_piece) # print the move
-        
         
         # reverse engineer the process
         self.tower.layers[remove_layer].pieces[remove_piece].val = 1 # add the removed piece back
@@ -241,10 +253,11 @@ class JengaGame:
         if all(piece.val == 0 for piece in last_layer.pieces): # if the last layer is empty, remove it
             self.tower.layers.remove(last_layer)
         self.num_moves -= 1
+        self.num_backtracks += 1
+        print(f"\nYou have {3-self.num_backtracks} backtrack remaining! ")
            
     def print_tower(self): # Time complexity: Average O(n), Worst O(n) (because number of pieces in each layer is constant but number of layers is not)
         
-        print('\033c')  # Clear the terminal
 
         print("\n---------- JENGA TOWER ----------\n")
 
@@ -299,8 +312,12 @@ def print_leaderboard(file_name): # Time complexity: Average O(n), Worst O(n)
         print(f"|{row[0]}|---------|{row[1]}|---------|{row[2]}|")
 
 
+def clear():  # clears the terminal. Average and worst case complexity O(1)
+    print('\033c')
+
 # Game loop
 def game_loop():
+    clear()
     game = JengaGame(18)
     game_over = False
 
@@ -309,7 +326,7 @@ def game_loop():
 
     while not game_over:
         print(f"\nNumber of moves: {game.num_moves}")
-        print(f"Moves list: {game.moves}")
+        print(f"Moves list: {list(game.moves)}")
         
         # Instruct the player of backtracking option after first move
         if game.num_moves > 0: print("\nEnter -1 if you want to undo your move")
@@ -326,6 +343,7 @@ def game_loop():
         game.removePiece(move) # Remove the piece from the tower
         
         # Print tower
+        clear()
         game.print_tower()
 
         # Check tower stability
@@ -342,6 +360,7 @@ def game_loop():
     
 
         # Print tower
+        clear()
         game.print_tower()
 
         if not game.checkStability(): # Check tower stability
