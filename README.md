@@ -162,7 +162,7 @@ ___
 1. **Deleting Moves (Removing from the Stack):**
     - Similar to Undoing Moves, removing a move during backtracking involves popping from the stack. This operation is, again, a constant time operation `O(1)` because, in a stack, the move will be at the top. For all intents and purposes, this is the same as backtracking.
 
-## QuickSort : `O(n log n)`
+## QuickSort : `O(n^2)`
 
 1. **Average Case Time Complexity:**
     
