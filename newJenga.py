@@ -299,7 +299,7 @@ def quicksort(data_arr): # Time complexity: Average O(n log n), Worst O(n^2)
     right = [x for x in data_arr if sorting_key(x) < sorting_key(pivot)]
     return quicksort(left) + middle + quicksort(right) # Recursively sort the left and right subarrays and concatenate them with the middle array
 
-def print_leaderboard(file_name): # Time complexity: Average O(n), Worst O(n)
+def print_leaderboard(file_name): # Time complexity: Average O(n log n), Worst O(n^2)
     with open(file_name, "r") as csv_file:
         csv_reader = csv.reader(csv_file)
         header = next(csv_reader)  # Skip the header row
