@@ -121,7 +121,7 @@ ___
     - Using a stack for backtracking may have implications for space complexity, especially if the stack becomes large. In the other hand, a queue would be efficient in space complexity, but would not satisfy our needs of removing the most-recently added element. **Therefore,** a circular queue is the best option for both, computational efficiency (`O(1)`) and space complexity, taking the least amount of space needed. 
 
 
-## QuickSort : `O(n log n)`
+## QuickSort : `O(n^2)`
 
 - **Leaderboard Sorting:**
     - QuickSort is employed to sort the leaderboard in descending order based on player scores. This ensures that the player with the highest score is positioned at the top of the leaderboard, providing a clear and easily interpretable ranking.
