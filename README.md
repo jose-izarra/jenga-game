@@ -113,7 +113,7 @@ ___
 - **Space Complexity:**
     - Using a stack for backtracking may have implications for space complexity, especially if the stack becomes large. However, in practice, for games such as _Jenga_ with a moderate number of moves, the space usage is often reasonable.
 
-## QuickSort : `O(n log n)`
+## QuickSort : `O(n^2)`
 
 - **Leaderboard Sorting:**
     - QuickSort is employed to sort the leaderboard in descending order based on player scores. This ensures that the player with the highest score is positioned at the top of the leaderboard, providing a clear and easily interpretable ranking.
