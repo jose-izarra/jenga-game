@@ -1,6 +1,7 @@
 <img src="image.png" width="100" height="100">
 
 ``Run newJenga.py to play the game!``
+or click [here](https://colab.research.google.com/drive/19a5Txou5FBvB1GbNrer2pruKfoIVDkN9#scrollTo=ME5X9ya5DSxm) to play on Google Colab!
 
 # Description
 ___

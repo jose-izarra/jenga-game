@@ -8,12 +8,12 @@
 
             Algorithms:
             - Backtracking: you will be able to go back after each move if you don't feel you removed the right piece
-            Worst: O(n) - Average: O(n) 
+            Worst: O(1) - Average: O(1) 
 
             - QuickSort: to sort the leaderboard in descending order
             Worst: O(n^2) - Average: O(n log n)
 
-            - Sequential Search: updating the tower's balance after each move
+            - Sequential Search: updating the tower's balance after each move (n = layers in the tower)
             Worst: O(n) - Average: O(n)
 
             
