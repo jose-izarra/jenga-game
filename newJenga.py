@@ -29,6 +29,7 @@ import csv
 from datetime import datetime
 from generateTower import *
 from collections import deque
+import pygame # music
 
 class JengaGame:
     def __init__(self, tower_height):
@@ -323,6 +324,13 @@ def game_loop():
 
     # Printing of layers is reversed so first layer is at the bottom
     game.print_tower()
+
+    # Music
+    mp3_file_path = "Undertale - Bonetrousle.mp3"
+    pygame.init()
+    pygame.mixer.init()   
+    pygame.mixer.music.load(mp3_file_path)
+    pygame.mixer.music.play(loops=-1 if True else 0)  # Set loops to -1 for infinite loop    
 
     while not game_over:
         print(f"\nNumber of moves: {game.num_moves}")
