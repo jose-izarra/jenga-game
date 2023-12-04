@@ -69,9 +69,13 @@ ___
     - If sorting is required for the leaderboard, the time complexity would be O(n log n) for the sorting operation. However, this might be a periodic operation rather than occurring after every score update.
 
 
-## Stack (Move Tracking):
+## Circular Queue (Stacked Queue as we saw in class)):
 
-- For the tracking of the moves we used a stack. This was a simple choice especially because of the nature of the data structure. Simply put, we would have the moves placed at the top of the stack following a LIFO, which would make backtracking an easy operation for us when it came for the time to implement it.
+- A *circular queue*, also known as a circular buffer, is a type of data structure that combines the features of a queue and an array (stack). It is a way to represent a queue with a fixed-size array, and when the end of the array is reached, the next element is considered to be at the beginning of the array, creating a circular structure. 
+
+- For the tracking of the moves we used a circular queue. This was a simple choice especially because of the nature of the data structure. Simply put, we would have the moves placed at the top of the stack following a LIFO, which would make backtracking an easy operation for us when it came for the time to implement it. Since we are allowing for a maximum of 3 backtracking operations, we need to only keep track of the last 4 elements. Therefore, the circular queue lets us pop the first element (FIFO) after the length is greater than 4. This data structure allows us to keep a time complexity of O(1) in all push/pop operations.
+
+- For our case, we will be using the deque object from collections to implement this function. This essentially lets us keep the best of both worlds from a queue and a stack, while still keeping its efficiency.
 
 1. **Backtracking Operations:**
     - A stack is employed to facilitate backtracking operations in the _Jenga_ game. As a player makes moves and can potentially undo them, the stack keeps track of the sequence of moves, allowing for efficient undoing of the last move.
@@ -79,6 +83,9 @@ ___
     - The stack follows the Last-In-First-Out (LIFO) principle, where the most recently added move is the first to be removed. This aligns with the nature of backtracking, where the latest move needs to be undone before previous moves.
 3. **Efficient Undoing:**
     - The stack's LIFO behavior allows for efficient undoing of moves. Popping the top of the stack corresponds to undoing the last move made in the game.
+4. **FIFO:** 
+    - After the length of the array is more than the desired, we are able to efficiently pop the first element in following FIFO sequence.
+
 #### Key Details:
 
 - **Push and Pop Operations:**
@@ -92,14 +99,14 @@ ___
 ___
 # Algorithms:
 
-## Backtracking with a Stack: `O(n)`
+## Backtracking with a Circular Queue: `O(1)`
 
 1. **Undoing Moves (Backtracking):**
-    - Undoing a move with a stack involves popping the top element of the stack. This operation is a constant time operation `O(1)` since it directly accesses the top of the stack.
-2. **Inserting Moves (Adding to the Stack):**
+    - Undoing a move with a circular queue involves popping the top element of the circular queue, just like in a stack. This operation is a constant time operation `O(1)` since it directly accesses the top of the stack.
+2. **Inserting Moves (Adding to the Queue):**
     - When a new move is made, it needs to be pushed onto the stack. This operation is also a constant time operation `O(1)` as it involves adding an element to the top of the stack.
-3. **Deleting Moves (Removing from the Stack):**
-    - Removing a move during backtracking involves popping the top element from the stack. Like inserting moves, this operation is a constant time operation `O(1)`.
+3. **Deleting Moves (Removing from the Queue):**
+    - Removing the first enqueued move when the buffer limit has been reached (4). Like inserting operations, this  is a constant time operation of `O(1)`.
 
 #####  **Key Advantages:**
 
@@ -111,7 +118,8 @@ ___
 ##### Considerations:
 
 - **Space Complexity:**
-    - Using a stack for backtracking may have implications for space complexity, especially if the stack becomes large. However, in practice, for games such as _Jenga_ with a moderate number of moves, the space usage is often reasonable.
+    - Using a stack for backtracking may have implications for space complexity, especially if the stack becomes large. In the other hand, a queue would be efficient in space complexity, but would not satisfy our needs of removing the most-recently added element. **Therefore,** a circular queue is the best option for both, computational efficiency (`O(1)`) and space complexity, taking the least amount of space needed. 
+
 
 ## QuickSort : `O(n log n)`
 
@@ -145,13 +153,13 @@ ___
 ## Table Summary
 | **Algorithm** | **Decription** | **Time Complexity (Worst Case)** | **Time Complexity (Average Case)** |
 |-|-|-| - |
-| **Backtracking** | Ability to go back after each move if you don't feel you removed the right piece | `O(n)`| `O(n)` |  
+| **Backtracking** | Ability to go back after each move if you don't feel you removed the right piece | `O(1)`| `O(1)` |  
 | **QuickSort** | sed to sort the leaderboard in descending order | `O(n^2)` | `O(n log n)`|
 | **Linear/Sequential Search**| Used to update the tower's balance and probability of collapsing after each move made| `O(n)` | `O(n)` |
 
 ## Backtracking : `O(n)`
 
-- The time complexity of backtracking with a stack depends on the specific operations done during backtracking. In the worst possible scenario we would have to go through the entire stack giving us a time complexity of `O(n)`, however, the operations that go through the stack themselves are of `O(1)` time complexity. The operations of note would involve:
+- The time complexity of backtracking with a circular queue for each operation is of O(1). In the worst possible scenario we would have to go through the entire stack giving us a time complexity of `O(4)` since that is the maximum length of the circular queue, however, the operations that go through the stack themselves are of `O(1)` time complexity. The operations of note would involve:
 
 1. **Undoing Moves (Backtracking):**
     - In a stack, undoing a move involves popping the most recent move, thus making the previous move now the current one. This operation is typically done in constant time `O(1)`.
