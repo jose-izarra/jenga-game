@@ -24,59 +24,59 @@ ___
 
 # Unfamiliar with _Jenga_? <div id='id-section1'/>
 
-Rules and objective of the game:
+## Rules and objective of the game
 
-Players take turns removing one block at a time from a tower constructed of 54 blocks. Each block removed is then placed on top of the tower, creating a progressively more unstable structure.
+In this version of *Jenga* the players competes to get the heighest amount of moves before the tower collapses. The player removes one block at a time from a tower constructed of 54 blocks or 18 layers. Each block removed is then placed on top of the tower, creating a progressively more unstable structure.
 
-Starting off, players take turns removing one block from any level below the highest completed one and placing it horizontally atop the tower, perpendicular to any blocks on which it is to rest.
+Starting off, the player starts removing one block from any layer below the highest two, and placing it horizontally atop the tower, perpendicular to any blocks on which it is to rest.
 
 Once a level contains three blocks, it is complete and may not have any more blocks added to it.
 
-The game ends when any portion of the tower collapses, caused by either the removal of a block or its new placement. The last player to complete a turn before the collapse is the winner.
+The game ends when any portion of the tower collapses, caused by either the removal of a block or its new placement. The player with the highest score wins the game.
 ___
 # Data Structures
 
 ## 3D matrix (Tower) :
 
-- Since we wanted to make a vertical tower with different levels and sides, we immediately identified that in the game of _Jenga_, a 3-Dimensional Matrix would be the most effective data structure to store and manipulate all the values.
-#### Reasons :
+- Since we wanted to make a vertical tower with dynamic levels and valued pieces, we immediately identified that in the game of _Jenga_, a three dimensional matrix would be the most effective data structure to store and manipulate all the values.
+### Reasons :
 1. **Spatial Representation:**
     - _Jenga_ towers are three-dimensional structures, and a 3D matrix is well-suited for spatial representation. Each element in the matrix corresponds to a specific location in the tower, allowing for an intuitive and accurate representation of the tower's structure.
 2. **Layered Structure:**
-    - The tower consists of layers of _Jenga_ blocks, and the 3D matrix can be used to organize these layers. Each layer is represented as a 2D matrix within the 3D matrix, with individual elements representing the presence or absence of a _Jenga_ block at a specific position.
+    - The tower consists of layers of _Jenga_ blocks, and the 3D matrix can be used to organize these layers. Each layer is represented as a 2D matrix within the 3D matrix, with individual elements representing the presence or absence of a _Jenga_ block at a specific position and the orientation of the layer itself (vertical/horizontal).
 3. **Ease of Manipulation:**
     - Manipulating the _Jenga_ tower involves adding or removing blocks at specific positions. The 3D matrix provides a straightforward way to perform these operations, as each element in the matrix corresponds to a block in the tower.
 4. **Efficient Indexing:**
-    - Accessing specific positions within the tower is efficient using 3D matrix indices. The indices can be used to locate and modify the state of a particular block in constant time.
+    - Accessing specific positions within the tower is efficient using 3D matrix indices. The indices can be used to locate and modify the state of a particular block in constant time (O(1)).
 5. **Visualization:**
     - The 3D matrix facilitates the visualization of the tower's structure in the code. Developers can easily understand and reason about the state of the tower by examining the matrix, making it a valuable tool for debugging and code comprehension.
 
 ## Array (Leaderboard) :
 
-- The simplest way for us to have stored the leaderboard values was with an array. This was just for convenience sake, since the indexing allowed for us to not have to worry about external values, and due to our design we would not have more than 2 players being tracked at the same time. As such we opted to use a standard Array. Furthermore, there are more reasons for this choice.
-#### Reasons :
+- The simplest way for us to have stored the leaderboard values during a match was using an array, with long term storage on a .txt document. This allowed us to easily implement a sorting algorithm every time the scores where updated. As such we opted to use a standard Array. Furthermore, there are more reasons for this choice.
+### Reasons :
 
 1. **Leaderboard Representation:**
-    - An array is utilized to represent the leaderboard in the _Jenga_ game. Each element in the array corresponds to a player, and the array maintains an ordered list of scores.
+    - An array is utilized to represent the leaderboard in the _Jenga_ game. Each element in the array corresponds to a player and is associated with their score. The array is sorted in descending order based on player scores, with the highest score at the top of the leaderboard.
 2. **Simple and Direct Indexing:**
     - The array allows for simple and direct indexing, where each player's score is associated with their position in the array. This simplicity facilitates straightforward access and modification of player scores.
-3. **Static Size:**
-    - Unlike a hashmap, the array has a static size, meaning it is pre-allocated with a fixed number of slots. This size determines the maximum number of players that can be accommodated in the leaderboard.
-#### Key Details:
+3. **Efficient Sorting:**
+    - The array is sorted in descending order based on player scores. This allows for efficient sorting of the leaderboard, which is a key feature of the _Jenga_ game. The leaderboard is sorted after every score update, ensuring that the player with the highest score is positioned at the top of the leaderboard.
+### Key Details:
 
 - **Insertion and Retrieval:**
     - The time complexity for inserting a new score or retrieving an existing score from the array is `O(1)` because array indexing is a constant time operation.
 - **Sorting (if needed):**
-    - If sorting is required for the leaderboard, the time complexity would be O(n log n) for the sorting operation. However, this might be a periodic operation rather than occurring after every score update.
+    - If sorting is required for the leaderboard, the time complexity would be O(n log n) for the sorting operation using **quicksort**. However, this might be a periodic operation rather than occurring after every score update.
 
 
-## Circular Queue (Stacked Queue as we saw in class)):
+## Circular Queue (Stacked Queue as we saw in class):
 
 - A *circular queue*, also known as a circular buffer, is a type of data structure that combines the features of a queue and an array (stack). It is a way to represent a queue with a fixed-size array, and when the end of the array is reached, the next element is considered to be at the beginning of the array, creating a circular structure. 
 
 - For the tracking of the moves we used a circular queue. This was a simple choice especially because of the nature of the data structure. Simply put, we would have the moves placed at the top of the stack following a LIFO, which would make backtracking an easy operation for us when it came for the time to implement it. Since we are allowing for a maximum of 3 backtracking operations, we need to only keep track of the last 4 elements. Therefore, the circular queue lets us pop the first element (FIFO) after the length is greater than 4. This data structure allows us to keep a time complexity of O(1) in all push/pop operations.
 
-- For our case, we will be using the deque object from collections to implement this function. This essentially lets us keep the best of both worlds from a queue and a stack, while still keeping its efficiency.
+- For our case, we will be using the deque() object from collections to implement this function. This essentially lets us keep the best of both worlds from a queue and a stack, while still keeping its efficiency.
 
 1. **Backtracking Operations:**
     - A stack is employed to facilitate backtracking operations in the _Jenga_ game. As a player makes moves and can potentially undo them, the stack keeps track of the sequence of moves, allowing for efficient undoing of the last move.
@@ -87,7 +87,7 @@ ___
 4. **FIFO:** 
     - After the length of the array is more than the desired, we are able to efficiently pop the first element in following FIFO sequence.
 
-#### Key Details:
+### Key Details:
 
 - **Push and Pop Operations:**
     - The time complexity for push (adding a move to the stack) and pop (removing the last move from the stack) operations is typically `O(1)`. These operations are constant time and don't depend on the size of the stack.
@@ -109,14 +109,14 @@ ___
 3. **Deleting Moves (Removing from the Queue):**
     - Removing the first enqueued move when the buffer limit has been reached (4). Like inserting operations, this  is a constant time operation of `O(1)`.
 
-#####  **Key Advantages:**
+####  **Key Advantages:**
 
 1. **Flexibility:**
     - Backtracking provides flexibility by allowing players to explore different move sequences. 
 2. **Error Correction:**
     - In a game with complex rules and potential for mistakes, backtracking serves as a mechanism for error correction. If a player realizes that a move has negatively impacted the tower's stability, they can backtrack to a previous state and try an alternative approach.
 
-##### Considerations:
+#### **Considerations**:
 
 - **Space Complexity:**
     - Using a stack for backtracking may have implications for space complexity, especially if the stack becomes large. In the other hand, a queue would be efficient in space complexity, but would not satisfy our needs of removing the most-recently added element. **Therefore,** a circular queue is the best option for both, computational efficiency (`O(1)`) and space complexity, taking the least amount of space needed. 
@@ -127,7 +127,7 @@ ___
 - **Leaderboard Sorting:**
     - QuickSort is employed to sort the leaderboard in descending order based on player scores. This ensures that the player with the highest score is positioned at the top of the leaderboard, providing a clear and easily interpretable ranking.
 
-##### **Key Advantages:**
+#### **Key Advantages:**
 1. **Recursion:**
 	- QuickSort utilizes recursion as a key element of its sorting strategy. The algorithm recursively divides the array of scores into smaller subarrays, sorting each subarray independently.
 2. **Efficient Sorting:**
@@ -136,18 +136,15 @@ ___
     - Sorting in descending order is important for leaderboard presentation. QuickSort, with its average time complexity of `O(n log n)`, ensures fast sorting even for larger leaderboards if this were to support a larger playerbase.
 
 
-## Linear Search for Tower Probabilities: `O(n)`
+## Linear Search for Tower Balance: `O(n)`
 
-- To update the probabilities of the towers layers and pieces, we use Linear Search which has a time complexity of `O(n)`, meaning that we go through the entire tower as one piece's change will impact the probabilities of the layers in each as well.
+- To update the Balance of the tower, we use Linear Search which has a time complexity of `O(n)`, meaning that we go through the entire tower as one piece's change will impact the balance of the layers in each as well.
 
-1. **Checking Tower Probabilities:**
-    - Linear search is employed to check the probabilities associated with the state of the _Jenga_ tower. This involves updating for specific configurations, and conditions within the tower matrix that influence the probability of the tower falling over.
-2. **Dynamic Probability Evaluation:**
-    - Linear search in this context implies a dynamic evaluation of the tower's stability. The algorithm traverses the tower matrix to identify relevant conditions that contribute to the overall probability calculation. For example in the case of a side and center piece missing in a layer, it will undoubtedly cause the layers above to fall.
+1. **Checking Tower Balance:**
+    - Linear search is employed to check the balance associated with the state of each layer in the _Jenga_ tower. The algorithm traverses the tower matrix to identify relevant conditions that contribute to the overall balance calculation. For example, if a layer has a side and center piece missing, it will undoubtedly cause the layer to fall.
+2. **Dynamic Balance Evaluation:**
+    - The balance of the tower is dynamic and changes with each move. Linear search allows for efficient evaluation of the tower's balance after each move, ensuring that the tower's stability is accurately represented.
 
-##### Considerations:
-
-- The main thing to mention here is that we know this algorithm is not perfect for the job, but it gets it done with a reasonable accuracy. Specifically considering the case that when a piece is removed and the tower does not fall, this would imply that the probabilities of the tower falling will only be updated to the layers above the piece that was removed. This in our case could be added as an improvement, but the worst case scenario if we were only to update the layers above the removed piece would still be done in linear `O(n)` time, so we did not think it that big of an issue.
 ___
 # Project Analysis: Time Complexity
 
@@ -158,7 +155,7 @@ ___
 | **QuickSort** | sed to sort the leaderboard in descending order | `O(n^2)` | `O(n log n)`|
 | **Linear/Sequential Search**| Used to update the tower's balance and probability of collapsing after each move made| `O(n)` | `O(n)` |
 
-## Backtracking : `O(n)`
+## Backtracking : `O(1)`
 
 - The time complexity of backtracking with a circular queue for each operation is of O(1). In the worst possible scenario we would have to go through the entire stack giving us a time complexity of `O(4)` since that is the maximum length of the circular queue, however, the operations that go through the stack themselves are of `O(1)` time complexity. The operations of note would involve:
 
@@ -171,7 +168,7 @@ ___
 1. **Deleting Moves (Removing from the Stack):**
     - Similar to Undoing Moves, removing a move during backtracking involves popping from the stack. This operation is, again, a constant time operation `O(1)` because, in a stack, the move will be at the top. For all intents and purposes, this is the same as backtracking.
 
-## QuickSort : `O(n^2)`
+## QuickSort : `O(n log n)`
 
 1. **Average Case Time Complexity:**
     
@@ -188,8 +185,8 @@ ___
 #### Time Complexity:
 
 - **Average Case:**
-    - For the average case, Linear search will run at (quite obviously) `O(n)` time complexity, where n is the size of the tower matrix. Linear search sequentially examines elements and layers in this case to make sure that any conditions being met impact the tower's probability of falling
+    - For the average case, Linear search will run at `O(n)` time complexity, where n is the amount of layers in the matrix. This is because we will have to go through each layer to evaluate the stability of the tower. This is a negligible time complexity since we do not have to scale the game, but it is still important to note.
 - **Worst Case:**
-    - For the worst case, Linear search also has an `O(n)` time complexity. In the worst case, the search operation needs to traverse the entire tower matrix to evaluate its stability. Which although a negligible for the most part in this game since we do not have to scale it the game, we would normally look for a better method to look over the probabilities
+    - For the worst case, Linear search also has an `O(n)` time complexity. In the worst case, the search operation needs to traverse the entire tower matrix to evaluate its stability. Which although a negligible for the most part in this game since we do not have to scale it the game, we would normally look for a better method to look over the balance.
 
 ___
