@@ -327,10 +327,13 @@ def game_loop():
 
     # Music
     mp3_file_path = "Undertale - Bonetrousle.mp3"
-    pygame.init()
-    pygame.mixer.init()   
-    pygame.mixer.music.load(mp3_file_path)
-    pygame.mixer.music.play(loops=-1 if True else 0)  # Set loops to -1 for infinite loop    
+    try:
+        pygame.init()
+        pygame.mixer.init()   
+        pygame.mixer.music.load(mp3_file_path)
+        pygame.mixer.music.play(loops=-1 if True else 0)    
+    except pygame.error as e:
+        print("Error initializing music:", e) 
 
     while not game_over:
         print(f"\nNumber of moves: {game.num_moves}")
