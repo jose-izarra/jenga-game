@@ -34,16 +34,16 @@ class JengaGame:
         self.tower = JengaTower(tower_height)
         # EVERY LAYER VALUE STARTS AT 0
 
-        # when initializing game, populate layers with 1s to indicate presence of pieces
+        # When initializing game, populate layers with 1s to indicate presence of pieces
         for layer in self.tower.layers:
             for piece in layer.pieces:
                 piece.val = 1
         
-        # moves stack for backtracking
+        # Moves stack for backtracking
         self.moves = []
         # order -> [ [removed_layer_piece_index_1, removed_piece_index_1, added_piece_layer_index_1, added_piece_index_1], [... _2] ]
         
-        self.num_moves = 0
+        self.num_moves = 0 # Keep track of number of moves
         
 
     def checkStability(self): # Time complexity: Average O(n), Worst O(n)
@@ -101,6 +101,8 @@ class JengaGame:
         print(f"\nBalance: {balance}") 
 
         # Message to player depending on the balance of the tower
+        
+        # 0 is perfectly stable - 5 is tower fell
         if balance == 0:
             print("\nTower is stable ヽ(´▽`)/")
             return True
@@ -204,15 +206,16 @@ class JengaGame:
             return
         
     def addMove(self, layer_index, piece_index, add): # Time complexity: Average O(1), Worst O(1)
+        # The "add" variable lets us know if we are handling the removed piece or the added piece
         
-        # append the new move to stack
+        # Append the new move to stack
         
-        # first you add the removed piece, and then the added piece
+        # First you add the removed piece, and then the added piece
         if not add:
             self.moves.append([layer_index, piece_index]) # add the removed piece
             
         else: 
-            self.moves[-1].append(layer_index)
+            self.moves[-1].append(layer_index)  # add the added piece
             self.moves[-1].append(piece_index)
 
     def backtrack(self): # Time complexity: Average O(1), Worst O(1)
